@@ -20,7 +20,7 @@ public class AddressBookFileIO
     {
         try
         {
-            Path workPath = Paths.get(HOME + WORK_SPACE + "\\OutputDirectory");
+            Path workPath = Paths.get(HOME + WORK_SPACE + "\\OutputDirectory\\FileIO");
             if(Files.notExists(workPath))
             {
                 Files.createDirectories(workPath);
@@ -45,7 +45,7 @@ public class AddressBookFileIO
 
     public LinkedList<ContactBook> readContacts(File file)
     {
-        Path filePath = Paths.get(HOME + WORK_SPACE + "\\OutputDirectory\\" + file);
+        Path filePath = Paths.get(HOME + WORK_SPACE + "\\OutputDirectory\\FileIO\\" + file);
         LinkedList<ContactBook> contactList = new LinkedList<ContactBook>();
         try
         {

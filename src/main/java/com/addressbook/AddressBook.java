@@ -1,13 +1,15 @@
 package com.addressbook;
 
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 
 public class AddressBook
 {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
         System.out.println("Welcome To Address Book");
         int a=0;
 
@@ -83,7 +85,6 @@ public class AddressBook
                     edit();
                     break;
                 case 4:
-
                     display();
                     break;
                 case 5:
@@ -230,9 +231,9 @@ public class AddressBook
         Contact.put(AddressBook.get(entry-1), contactList);
     }
 
-    public static void write(String addressBookName)
-    {
+    public static void write(String addressBookName) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
         new AddressBookFileIO().writeAddressBookToFile(addressBookName, Contact.get(addressBookName));
+        new AddressBookCSV().writeToCSV(addressBookName, Contact.get(addressBookName));
     }
 
     public static void display()
