@@ -234,6 +234,7 @@ public class AddressBook
     public static void write(String addressBookName) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
         new AddressBookFileIO().writeAddressBookToFile(addressBookName, Contact.get(addressBookName));
         new AddressBookCSV().writeToCSV(addressBookName, Contact.get(addressBookName));
+        new AddressBookJSON().writeToJson(addressBookName, Contact.get(addressBookName));
     }
 
     public static void display()
