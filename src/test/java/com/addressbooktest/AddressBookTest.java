@@ -35,5 +35,11 @@ public class AddressBookTest
         Assert.assertEquals(2, contactBookList.size());
     }
 
+    @Test
+    public void givenCity_WhenRetrieved_ShouldMatchCount()
+    {
+        int result = addressBookDBService.getCountByCity("Jaipur");
+        Assert.assertEquals(1, result);
+    }
 }
 

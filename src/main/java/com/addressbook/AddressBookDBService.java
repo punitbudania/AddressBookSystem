@@ -91,4 +91,21 @@ public class AddressBookDBService
         }
         return contactBookList;
     }
+
+    public int getCountByCity(String city)
+    {
+        int count = -1;
+        String sql = String.format("select count(city) from customer_address where city = '%s'", city);
+        try(Connection connection = this.getConnection())
+        {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            if(resultSet.next()) count = resultSet.getInt(1);
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+        return count;
+    }
 }
