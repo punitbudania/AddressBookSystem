@@ -3,6 +3,7 @@ package com.addressbook;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddressBookDBService
@@ -107,5 +108,101 @@ public class AddressBookDBService
             throwables.printStackTrace();
         }
         return count;
+    }
+
+    public void addEmployeeToDatabase(String book, String firstName, String lastName, LocalDate date, String address, String city, String state, long zip, long phoneNo, String email)
+    {
+        HashMap<String, Integer> bookDetails = new HashMap<>();
+        bookDetails.put("CapG", 1);
+        bookDetails.put("Bridgelabz", 2);
+        Connection connection = null;
+        try
+        {
+            connection = this.getConnection();
+            connection.setAutoCommit(false);
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+
+        int contactID = -1;
+        try (Statement statement = connection.createStatement())
+        {
+            String sql = String.format("INSERT INTO customer_details (book_name, first_name, last_name, date_added)" +
+                    "VALUES ('%s', '%s', '%s', '%s')", book, firstName, lastName, Date.valueOf(date));
+            int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+            if(rowAffected == 1)
+            {
+                ResultSet resultSet = statement.getGeneratedKeys();
+                if(resultSet.next()) contactID = resultSet.getInt(1);
+            }
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try(Statement statement = connection.createStatement())
+        {
+            String sql = String.format("INSERT INTO customer_address (customer_id, address, city, state, zip, phoneNo, email)" +
+                    "VALUES (%s, '%s', '%s', '%s', %s, %s, '%s')", contactID, address, city, state, zip, phoneNo, email);
+            statement.executeUpdate(sql);
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try(Statement statement = connection.createStatement())
+        {
+            int bookID = -1;
+            for (String i : bookDetails.keySet())
+            {
+                if(i == book)
+                {
+                    bookID = bookDetails.get(i);
+                }
+            }
+            String sql = String.format("INSERT INTO customer_book (book_id, customer_id) VALUES (%s, %s)", bookID, contactID);
+            statement.executeUpdate(sql);
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            connection.commit();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        finally
+        {
+            if(connection != null)
+            {
+                try {
+                    connection.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
     }
 }

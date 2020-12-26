@@ -5,6 +5,7 @@ import com.addressbook.ContactBook;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -40,6 +41,14 @@ public class AddressBookTest
     {
         int result = addressBookDBService.getCountByCity("Jaipur");
         Assert.assertEquals(1, result);
+    }
+
+    @Test
+    public void givenContact_WhenAdded_ShouldAddedToAllTables() throws SQLException
+    {
+        addressBookDBService.addEmployeeToDatabase("CapG", "Harkirat", "Singh", LocalDate.now(), "Saheen Bagh", "New Delhi", "Delhi", 110021, 845749899, "hsingh@gmail.com");
+        List<ContactBook> contactBookData = addressBookDBService.readData();
+        Assert.assertEquals(3, contactBookData.size());
     }
 }
 
