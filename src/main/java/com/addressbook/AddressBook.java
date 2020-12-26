@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 public class AddressBook
 {
+    static ContactBook contactList;
+
     public static void main(String[] args) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
         System.out.println("Welcome To Address Book");
         int a=0;
@@ -193,6 +195,8 @@ public class AddressBook
     static ArrayList<Long> Zip = new ArrayList<Long>();
     static ArrayList<Long> Mobile = new ArrayList<Long>();
     static ArrayList<String> Email = new ArrayList<String>();
+    static ArrayList<String> data = new ArrayList<String>();
+
 
 
     public static void addcontact()
@@ -200,41 +204,50 @@ public class AddressBook
         entry++;
         Scanner input = new Scanner(System.in);
 
+
         System.out.println("Enter Last Name:");
         String lastname = input.next();
         Lname.add(lastname);
+        data.add(lastname);
 
         System.out.println("Enter City:");
         String city = input.next();
         City.add(city);
         CityPerson.put(Fname.get(entry-1), city);
+        data.add(city);
 
         System.out.println("Enter State:");
         String state = input.next();
         State.add(state);
         StatePerson.put(state, Fname.get(entry-1));
+        data.add(state);
 
         System.out.println("Enter Zip:");
         Long zip = input.nextLong();
         Zip.add(zip);
         ZipPerson.put(zip, Fname.get(entry-1));
+        data.add(String.valueOf(zip));
 
         System.out.println("Enter Phone Number:");
         long phonenumber = input.nextLong();
         Mobile.add(phonenumber);
+        data.add(String.valueOf(phonenumber));
 
         System.out.println("Enter Email ID:");
         String email = input.next();
         Email.add(email);
+        data.add(email);
 
-        ContactBook contactList = new ContactBook(Fname.get(entry-1), lastname, city, state, zip, phonenumber, email);
+        contactList = new ContactBook(Fname.get(entry-1), lastname, city, state, zip, phonenumber, email);
         Contact.put(AddressBook.get(entry-1), contactList);
+        data.add(Fname.get(entry-1));
     }
 
     public static void write(String addressBookName) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
-        new AddressBookFileIO().writeAddressBookToFile(addressBookName, Contact.get(addressBookName));
+        System.out.println(Contact.get(addressBookName));
+        //new AddressBookFileIO().writeAddressBookToFile(addressBookName, Contact.get(addressBookName));
         new AddressBookCSV().writeToCSV(addressBookName, Contact.get(addressBookName));
-        new AddressBookJSON().writeToJson(addressBookName, Contact.get(addressBookName));
+        //new AddressBookJSON().writeToJson(addressBookName, Contact.get(addressBookName));
     }
 
     public static void display()

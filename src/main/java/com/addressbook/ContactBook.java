@@ -11,6 +11,8 @@ public class ContactBook extends LinkedList<ContactBook> {
     public String email;
     public Long zip;
     public Long mobile;
+    public String book;
+    public int id;
 
     public ContactBook(String fname, String lname, String city, String state, Long zip, Long mobile, String email)
     {
@@ -21,6 +23,14 @@ public class ContactBook extends LinkedList<ContactBook> {
         this.email = email;
         this.zip = zip;
         this.mobile = mobile;
+    }
+
+    public ContactBook(int id, String book, String fname, String lname)
+    {
+        this.id = id;
+        this.book = book;
+        this.fname = fname;
+        this.lname = lname;
     }
 
     public String getFname() {
@@ -79,6 +89,7 @@ public class ContactBook extends LinkedList<ContactBook> {
         this.mobile = mobile;
     }
 
+    /*
     @Override
     public String toString() {
         return "ContactBook{" +
@@ -90,5 +101,13 @@ public class ContactBook extends LinkedList<ContactBook> {
                 ", zip=" + zip +
                 ", mobile=" + mobile +
                 '}';
+    }
+
+     */
+
+    @Override
+    public String toString()
+    {
+        return "{ '" + fname + "', '" + lname + "', '" + city + "', '" + state + "', '" + email + "', '" + zip + "', '" + mobile + "' }";
     }
 }

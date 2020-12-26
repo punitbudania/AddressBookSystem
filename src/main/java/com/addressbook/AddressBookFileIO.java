@@ -11,7 +11,7 @@ import java.util.LinkedList;
 public class AddressBookFileIO
 {
     private static final String HOME = System.getProperty("user.home");
-    private static String WORK_SPACE = "\\IdeaProjects\\AddressBook";
+    private static String WORK_SPACE = "C:\\Users\\PUNIT BUDANIA\\IdeaProjects\\AddressBook\\OutputDirectory\\FileIO\\Boss--contacts.txt";
 
     public AddressBookFileIO() {
     }
@@ -20,6 +20,7 @@ public class AddressBookFileIO
     {
         try
         {
+            /*
             Path workPath = Paths.get(HOME + WORK_SPACE + "\\OutputDirectory\\FileIO");
             if(Files.notExists(workPath))
             {
@@ -30,12 +31,14 @@ public class AddressBookFileIO
             {
                 Files.createFile(tempPath);
             }
+
+             */
             StringBuffer contactBuffer = new StringBuffer();
             contactList.stream().forEach(contact -> {
                 String contactData = contact.toString().concat("\n");
                 contactBuffer.append(contactData);
             });
-            Files.write(tempPath, contactBuffer.toString().getBytes());
+            Files.write(Path.of(WORK_SPACE), contactBuffer.toString().getBytes());
         }
         catch (IOException e)
         {
