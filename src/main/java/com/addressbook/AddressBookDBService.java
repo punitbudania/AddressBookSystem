@@ -1,6 +1,7 @@
 package com.addressbook;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,5 +72,23 @@ public class AddressBookDBService
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public List<ContactBook> getCustomerFromDateRange(LocalDate startDate, LocalDate endDate)
+    {
+        List<ContactBook> contactBookList = new ArrayList<>();
+        String sql = String.format("SELECT * FROM customer_details WHERE date_added BETWEEN '%s' AND '%s';",
+                                            Date.valueOf(startDate), Date.valueOf(endDate));
+        try (Connection connection = this.getConnection())
+        {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            contactBookList = this.getContactData(resultSet);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return contactBookList;
     }
 }
