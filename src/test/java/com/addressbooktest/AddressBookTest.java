@@ -17,4 +17,11 @@ public class AddressBookTest
         List<ContactBook> contactBookData = addressBookDBService.readData();
         Assert.assertEquals(2, contactBookData.size());
     }
+
+    @Test
+    public void givenNewBookName_WhenUpdated_ShouldMatch()
+    {
+        int result = addressBookDBService.updateData("Arif", "Bridgelabz");
+        Assert.assertEquals(1, result);
+    }
 }

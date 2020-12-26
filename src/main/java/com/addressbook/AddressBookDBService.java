@@ -57,4 +57,19 @@ public class AddressBookDBService
         }
         return contactBookList;
     }
+
+    public int updateData(String firstName, String book)
+    {
+        String sql = String.format("update customer_details set book_name = '%s' where first_name = '%s'", book, firstName);
+        try (Connection connection = this.getConnection())
+        {
+            Statement statement = connection.createStatement();
+            return statement.executeUpdate(sql);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
