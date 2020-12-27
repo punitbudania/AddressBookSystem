@@ -12,7 +12,7 @@ public class AddressBookDBService
 
     private Connection getConnection() throws SQLException {
         connectionCounter++;
-        String jdbcURL = "jdbc:mysql://localhost:3306/address_book_service?useSSL=false";
+        String jdbcURL = "jdbc:mysql://localhost:3306/address_book_service?allowPublicKeyRetrieval=true&useSSL=false";
         String userName = "root";
         String password = "110016";
         Connection con;
@@ -110,7 +110,7 @@ public class AddressBookDBService
         return count;
     }
 
-    public void addEmployeeToDatabase(String book, String firstName, String lastName, LocalDate date, String address, String city, String state, long zip, long phoneNo, String email)
+    public void addContactToDatabase(String book, String firstName, String lastName, LocalDate date, String address, String city, String state, long zip, long phoneNo, String email)
     {
         HashMap<String, Integer> bookDetails = new HashMap<>();
         bookDetails.put("CapG", 1);
@@ -202,6 +202,31 @@ public class AddressBookDBService
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
+            }
+        }
+    }
+
+    public void addContactsToDBWithThreads(List<ContactBook> contactBookList)
+    {
+        HashMap<Integer, Boolean> contactAdditionStatus = new HashMap<>();
+        contactBookList.forEach(contact -> {
+            Runnable task = () -> {
+                contactAdditionStatus.put(contact.hashCode(), false);
+                System.out.println("Contact being added: " + Thread.currentThread().getName());
+                this.addContactToDatabase(contact.book, contact.fname, contact.lname, contact.dateAdded, contact.address,
+                                            contact.city, contact.state, contact.zip, contact.mobile, contact.email);
+                System.out.println("Contact added: " + Thread.currentThread().getName());
+                contactAdditionStatus.put(contact.hashCode(), true);
+            };
+            Thread thread = new Thread(task, contact.fname);
+            thread.start();
+        });
+        while (contactAdditionStatus.containsValue(false))
+        {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

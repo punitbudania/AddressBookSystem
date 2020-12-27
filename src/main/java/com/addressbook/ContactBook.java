@@ -1,7 +1,9 @@
 package com.addressbook;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class ContactBook extends LinkedList<ContactBook> {
     public String fname;
@@ -13,6 +15,13 @@ public class ContactBook extends LinkedList<ContactBook> {
     public Long mobile;
     public String book;
     public int id;
+    public LocalDate dateAdded;
+    public String address;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), fname, lname, city, state, email, zip, mobile, book, id, dateAdded, address);
+    }
 
     public ContactBook(String fname, String lname, String city, String state, Long zip, Long mobile, String email)
     {
@@ -31,6 +40,20 @@ public class ContactBook extends LinkedList<ContactBook> {
         this.book = book;
         this.fname = fname;
         this.lname = lname;
+    }
+
+    public ContactBook(int id, String book, String fname, String lname, LocalDate dateAdded, String address, String city, String state, long zip, long mobile, String email)
+    {
+        this.id = id;
+        this.book = book;
+        this.fname = fname;
+        this.lname = lname;
+        this.dateAdded = dateAdded;
+        this.city = city;
+        this.state = state;
+        this.email = email;
+        this.zip = zip;
+        this.mobile = mobile;
     }
 
     public String getFname() {
