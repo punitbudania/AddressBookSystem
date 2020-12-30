@@ -98,4 +98,14 @@ public class RestAssuredTest
         response.then().body("contactName", Matchers.is("Mohit"));
     }
 
+    @Test
+    public  void givenContactId_OnDelete_ShouldReturnSuccessStatus()
+    {
+        Response response = RestAssured.delete("/contacts/3");
+        int statusCode = response.getStatusCode();
+        MatcherAssert.assertThat(statusCode, CoreMatchers.is(200));
+        response = RestAssured.get("/contacts");
+        response.then().body("id", Matchers.not(3));
+    }
+
 }
