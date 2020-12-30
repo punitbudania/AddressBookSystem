@@ -1,10 +1,9 @@
 {
-    "contacts": 
-    [
-      {
-        "id": 1,
-        "bookName": "CapG",
-        "contactName": "Rohit"
-      }
-    ]
-  }
+  "contacts": [
+    {
+      "id": 1,
+      "bookName": "CapG",
+      "contactName": "Rohit"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 package com.addressbooktest;
 
+import com.addressbook.ContactBook;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.restassured.RestAssured;
@@ -34,4 +35,55 @@ public class RestAssuredTest
         response.then().body("id", Matchers.hasItems(1));
         response.then().body("contactName", Matchers.hasItems("Rohit"));
     }
+
+    @Test
+    public void givenMultipleContacts_OnPost_ShouldReturnAddedContact()
+    {
+        ContactBook[] arrayOfContacts = {
+                new ContactBook(0, "Bridgelabz", "Karan"),
+                new ContactBook(0, "Bridgelabz", "Usman")
+        };
+        Instant threadStart = Instant.now();
+        addContactToJsonServerWithThreads(Arrays.asList(arrayOfContacts));
+        Instant threadEnd = Instant.now();
+        System.out.println("Duration with thread" + Duration.between(threadStart, threadEnd));
+        Response response = RestAssured.get("/contacts");
+        response.then().body("contactName", Matchers.hasItems("Usman"));
+    }
+
+    private void addContactToJsonServerWithThreads(List<ContactBook> asList)
+    {
+        HashMap<Integer, Boolean> contactAdditionStatus = new HashMap<>();
+        asList.forEach(contactBook -> {
+            Runnable task = () -> {
+                contactAdditionStatus.put(contactBook.hashCode(), false);
+                System.out.println("Contact being added: " + Thread.currentThread().getName());
+                String contactDetails = "{\"bookName\": \"" + contactBook.book + "\", \"contactName\": \"" + contactBook.fname + "\"}";
+                addContactToJSON(contactDetails);
+                contactAdditionStatus.put(contactBook.hashCode(), true);
+                System.out.println("Contact added: " + Thread.currentThread().getName());
+            };
+            Thread thread = new Thread(task, contactBook.fname);
+            thread.start();
+        });
+        while (contactAdditionStatus.containsValue(false))
+        {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addContactToJSON(String contactData)
+    {
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(contactData)
+                .when()
+                .post("/contacts");
+    }
+
 }

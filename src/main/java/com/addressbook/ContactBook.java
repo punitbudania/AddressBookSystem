@@ -23,6 +23,13 @@ public class ContactBook extends LinkedList<ContactBook> {
         return Objects.hash(super.hashCode(), fname, lname, city, state, email, zip, mobile, book, id, dateAdded, address);
     }
 
+    public ContactBook(int id, String book, String fname)
+    {
+        this.id = id;
+        this.book = book;
+        this.fname = fname;
+    }
+
     public ContactBook(String fname, String lname, String city, String state, Long zip, Long mobile, String email)
     {
         this.fname = fname;
