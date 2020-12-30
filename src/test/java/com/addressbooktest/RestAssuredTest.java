@@ -86,4 +86,16 @@ public class RestAssuredTest
                 .post("/contacts");
     }
 
+    @Test
+    public void givenContact_OnUpdate_ShouldReturnUpdatedContact()
+    {
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body("{\"bookName\": \"CapG\", \"contactName\": \"Mohit\"}")
+                .when()
+                .put("/contacts/1");
+        response.then().body("contactName", Matchers.is("Mohit"));
+    }
+
 }
